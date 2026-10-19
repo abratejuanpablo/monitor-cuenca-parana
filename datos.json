@@ -1,0 +1,91 @@
+{
+  "actualizado_el": "2026-10-19T08:00:00Z",
+  "fuente": "Prefectura Naval Argentina & INA",
+  "represas": [
+    {
+      "id": "yacyreta",
+      "nombre": "Yacyretá",
+      "ubicacion": "Ituzaingó, Corrientes",
+      "tramo": "Alto Paraná (Arg / Py)",
+      "estado_badge": "🟡 Vertido Activo",
+      "estado_color": "amber",
+      "compuertas_totales": 18,
+      "compuertas_abiertas": 8,
+      "caudal_entrada": 16500,
+      "caudal_salida": 16200,
+      "nivel_embalse": 82.80,
+      "tiempo_transito": "El volumen liberado hoy impactará en las cotas de Santa Fe y Paraná en aprox. 5 a 6 días."
+    },
+    {
+      "id": "itaipu",
+      "nombre": "Itaipú",
+      "ubicacion": "Hernandarias, Alto Paraná",
+      "tramo": "Alto Paraná Superior (Bra / Py)",
+      "estado_badge": "🟢 Operación Normal",
+      "estado_color": "emerald",
+      "compuertas_totales": 14,
+      "compuertas_abiertas": 2,
+      "caudal_entrada": 11200,
+      "caudal_salida": 11000,
+      "nivel_embalse": 219.40,
+      "tiempo_transito": "El vertido actual tarda aproximadamente 48 horas en alcanzar el embalse de Yacyretá."
+    }
+  ],
+  "puertos": [
+    {
+      "id": "iguazu",
+      "nombre": "Puerto Iguazú",
+      "tramo": "Alto Paraná",
+      "altura": 22.40,
+      "variacion_24h": 0.35,
+      "alerta": 25.00,
+      "evacuacion": 28.00,
+      "tendencia": "subiendo",
+      "lead_time": "Pico de crecida desplazándose hacia Yacyretá (~24hs)."
+    },
+    {
+      "id": "corrientes",
+      "nombre": "Corrientes",
+      "tramo": "Alto Paraná",
+      "altura": 5.80,
+      "variacion_24h": 0.12,
+      "alerta": 6.50,
+      "evacuacion": 7.00,
+      "tendencia": "subiendo",
+      "lead_time": "El pico erogado en Yacyretá tarda aprox. 48hs en registrarse aquí."
+    },
+    {
+      "id": "santa_fe",
+      "nombre": "Santa Fe (Puerto Capital)",
+      "tramo": "Paraná Medio",
+      "altura": 4.15,
+      "variacion_24h": 0.08,
+      "alerta": 4.70,
+      "evacuacion": 5.30,
+      "tendencia": "subiendo",
+      "lead_time": "El agua liberada hoy en Yacyretá llegará a este puerto en 5 a 6 días."
+    },
+    {
+      "id": "parana",
+      "nombre": "Paraná",
+      "tramo": "Paraná Medio",
+      "altura": 4.10,
+      "variacion_24h": 0.10,
+      "alerta": 4.70,
+      "evacuacion": 5.00,
+      "tendencia": "subiendo",
+      "lead_time": "Comportamiento acoplado a la cota de Santa Fe."
+    },
+    {
+      "id": "rosario",
+      "nombre": "Rosario",
+      "tramo": "Paraná Inferior",
+      "altura": 3.85,
+      "variacion_24h": 0.00,
+      "alerta": 5.00,
+      "evacuacion": 5.30,
+      "tendencia": "estacionario",
+      "lead_time": "La onda del tramo medio impactará en la zona sur en 7 a 9 días."
+    }
+  ]
+}

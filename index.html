@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Cuenca Paraná - Alturas de Ríos y Represas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-16 font-sans antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-water text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight text-white">Monitor Cuenca Paraná</h1>
+                    <p class="text-xs text-slate-400">Hidrología, Represas & Alerta Temprana</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div id="status-badge" class="flex items-center gap-2 text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-slate-300 font-medium">Sincronizado PNA & INA</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pt-6 space-y-8">
+
+        <!-- Banner Estado Global -->
+        <section id="banner-global" class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/30 rounded-2xl p-5 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            🟡 FASE EL NIÑO ACTIVA
+                        </span>
+                        <span class="text-xs text-slate-400">· Tramo Medio en Ascenso Sostenido</span>
+                    </div>
+                    <h2 class="text-lg font-bold text-slate-100">Onda de Crecida Progresiva en la Cuenca</h2>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                        Los aportes de la cuenca alta en Brasil e Yacyretá mantienen un volumen erogado importante. Los niveles se sostendrán en parámetros altos durante las próximas semanas con tiempos de tránsito previsibles.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN INFOGRÁFICA DE REPRESAS -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Represas e Infraestructura Hídrica
+                    </h2>
+                    <p class="text-xs text-slate-400">Monitoreo de descargas y compuertas del vertedero en tiempo real</p>
+                </div>
+            </div>
+
+            <!-- Grilla de Represas -->
+            <div id="represas-container" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!-- Se renderiza dinámicamente vía js/app.js -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN PUERTOS E HIDRÓMETROS -->
+        <section class="space-y-4 pt-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-blue-400"></i> Estaciones y Puertos Hidrométricos
+                    </h2>
+                    <p class="text-xs text-slate-400">Mediciones oficiales y nivel de riesgo de inundación</p>
+                </div>
+
+                <!-- Buscador -->
+                <div class="relative w-full sm:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                    <input type="text" id="buscador" placeholder="Buscar puerto o ciudad..." 
+                        class="w-full pl-10 pr-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-blue-500 text-slate-200 placeholder:text-slate-500">
+                </div>
+            </div>
+
+            <!-- Filtros de Tramo -->
+            <div class="flex gap-2 overflow-x-auto pb-1 text-xs font-medium">
+                <button class="filtro-btn active px-4 py-2 bg-blue-600 text-white rounded-xl whitespace-nowrap" data-tramo="todos">Todos los puertos</button>
+                <button class="filtro-btn px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 rounded-xl whitespace-nowrap hover:bg-slate-800" data-tramo="Alto Paraná">Alto Paraná</button>
+                <button class="filtro-btn px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 rounded-xl whitespace-nowrap hover:bg-slate-800" data-tramo="Paraná Medio">Paraná Medio</button>
+                <button class="filtro-btn px-4 py-2 bg-slate-900 border border-slate-800 text-slate-300 rounded-xl whitespace-nowrap hover:bg-slate-800" data-tramo="Paraná Inferior">Paraná Inferior</button>
+            </div>
+
+            <!-- Grilla de Tarjetas de Puertos -->
+            <div id="puertos-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Se renderiza dinámicamente vía js/app.js -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
