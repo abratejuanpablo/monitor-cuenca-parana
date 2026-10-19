@@ -2,9 +2,11 @@ name: Actualizar Alturas Paraná
 
 on:
   schedule:
-    # Se ejecuta todos los días a las 08:00 AM UTC (5:00 AM Argentina)
     - cron: '0 8 * * *'
-  workflow_dispatch: # Permite probarlo/ejecutarlo manualmente desde la pestaña Actions en GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   actualizar:
