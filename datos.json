@@ -1,21 +1,7 @@
 {
-  "actualizado_el": "2026-10-20T00:51:24.060Z",
-  "fuente": "Prefectura Naval Argentina (PNA) - Datos Oficiales",
+  "actualizado_el": "2026-10-20T01:30:00.000Z",
+  "fuente": "Prefectura Naval Argentina & INA - Red Completa Cuenca del Paraná",
   "represas": [
-    {
-      "id": "yacyreta",
-      "nombre": "Yacyretá",
-      "ubicacion": "Ituzaingó, Corrientes",
-      "tramo": "Alto Paraná (Arg / Py)",
-      "estado_badge": "🟡 Vertido Activo",
-      "estado_color": "amber",
-      "compuertas_totales": 18,
-      "compuertas_abiertas": 8,
-      "caudal_entrada": 16500,
-      "caudal_salida": 16200,
-      "nivel_embalse": 82.8,
-      "tiempo_transito": "El volumen liberado hoy impactará en las cotas de Santa Fe y Paraná en aprox. 5 a 6 días."
-    },
     {
       "id": "itaipu",
       "nombre": "Itaipú",
@@ -29,6 +15,20 @@
       "caudal_salida": 11000,
       "nivel_embalse": 219.4,
       "tiempo_transito": "El vertido actual tarda aproximadamente 48 horas en alcanzar el embalse de Yacyretá."
+    },
+    {
+      "id": "yacyreta",
+      "nombre": "Yacyretá",
+      "ubicacion": "Ituzaingó, Corrientes",
+      "tramo": "Alto Paraná (Arg / Py)",
+      "estado_badge": "🟡 Vertido Activo",
+      "estado_color": "amber",
+      "compuertas_totales": 18,
+      "compuertas_abiertas": 8,
+      "caudal_entrada": 16500,
+      "caudal_salida": 16200,
+      "nivel_embalse": 82.8,
+      "tiempo_transito": "El volumen liberado hoy impactará en las cotas de Santa Fe y Paraná en aprox. 5 a 6 días."
     }
   ],
   "puertos": [
@@ -36,56 +36,177 @@
       "id": "iguazu",
       "nombre": "Puerto Iguazú",
       "tramo": "Alto Paraná",
-      "altura": 22.4,
+      "altura": 12.40,
       "variacion_24h": 0.35,
-      "alerta": 25,
-      "evacuacion": 28,
+      "alerta": 25.00,
+      "evacuacion": 28.00,
       "tendencia": "subiendo",
       "lead_time": "Pico de crecida desplazándose hacia Yacyretá (~24hs)."
+    },
+    {
+      "id": "posadas",
+      "nombre": "Posadas",
+      "tramo": "Alto Paraná",
+      "altura": 4.50,
+      "variacion_24h": 0.05,
+      "alerta": 11.00,
+      "evacuacion": 12.00,
+      "tendencia": "estacionario",
+      "lead_time": "Controlado por regulación de Yacyretá."
+    },
+    {
+      "id": "ituzaingo",
+      "nombre": "Ituzaingó",
+      "tramo": "Alto Paraná",
+      "altura": 1.85,
+      "variacion_24h": -0.02,
+      "alerta": 3.00,
+      "evacuacion": 3.50,
+      "tendencia": "bajando",
+      "lead_time": "Aguas abajo de la presa principal."
     },
     {
       "id": "corrientes",
       "nombre": "Corrientes",
       "tramo": "Alto Paraná",
-      "altura": 5.8,
+      "altura": 3.80,
       "variacion_24h": 0.12,
-      "alerta": 6.5,
-      "evacuacion": 7,
+      "alerta": 6.50,
+      "evacuacion": 7.00,
       "tendencia": "subiendo",
       "lead_time": "El pico erogado en Yacyretá tarda aprox. 48hs en registrarse aquí."
     },
     {
-      "id": "santa_fe",
-      "nombre": "Santa Fe (Puerto Capital)",
+      "id": "barranqueras",
+      "nombre": "Barranqueras",
       "tramo": "Paraná Medio",
-      "altura": 4.15,
-      "variacion_24h": 0.08,
-      "alerta": 4.7,
-      "evacuacion": 5.3,
+      "altura": 3.65,
+      "variacion_24h": 0.10,
+      "alerta": 6.00,
+      "evacuacion": 6.50,
       "tendencia": "subiendo",
-      "lead_time": "El agua liberada hoy en Yacyretá llegará a este puerto en 5 a 6 días."
+      "lead_time": "Comportamiento simétrico al puerto de Corrientes."
+    },
+    {
+      "id": "goya",
+      "nombre": "Goya",
+      "tramo": "Paraná Medio",
+      "altura": 3.90,
+      "variacion_24h": 0.08,
+      "alerta": 5.20,
+      "evacuacion": 5.80,
+      "tendencia": "subiendo",
+      "lead_time": "Tránsito de onda media en desarrollo."
+    },
+    {
+      "id": "reconquista",
+      "nombre": "Reconquista (Puerto Gral. San Martín)",
+      "tramo": "Paraná Medio",
+      "altura": 3.45,
+      "variacion_24h": 0.06,
+      "alerta": 5.10,
+      "evacuacion": 5.30,
+      "tendencia": "subiendo",
+      "lead_time": "Estable dentro los parámetros normales de estiaje medio."
+    },
+    {
+      "id": "la_paz",
+      "nombre": "La Paz",
+      "tramo": "Paraná Medio",
+      "altura": 4.10,
+      "variacion_24h": 0.09,
+      "alerta": 5.80,
+      "evacuacion": 6.15,
+      "tendencia": "subiendo",
+      "lead_time": "Ascenso sostenido por aportes superiores."
     },
     {
       "id": "parana",
       "nombre": "Paraná",
       "tramo": "Paraná Medio",
-      "altura": 4.1,
-      "variacion_24h": 0.1,
-      "alerta": 4.7,
-      "evacuacion": 5,
+      "altura": 2.95,
+      "variacion_24h": 0.07,
+      "alerta": 4.70,
+      "evacuacion": 5.00,
       "tendencia": "subiendo",
-      "lead_time": "Comportamiento acoplado a la cota de Santa Fe."
+      "lead_time": "Evolución favorable para la navegación comercial."
+    },
+    {
+      "id": "santa_fe",
+      "nombre": "Santa Fe (Puerto Capital)",
+      "tramo": "Paraná Medio",
+      "altura": 2.90,
+      "variacion_24h": 0.07,
+      "alerta": 4.70,
+      "evacuacion": 5.30,
+      "tendencia": "subiendo",
+      "lead_time": "El agua liberada en Yacyretá se refleja en este tramo."
+    },
+    {
+      "id": "diamante",
+      "nombre": "Diamante",
+      "tramo": "Paraná Inferior",
+      "altura": 2.70,
+      "variacion_24h": 0.04,
+      "alerta": 5.30,
+      "evacuacion": 5.80,
+      "tendencia": "subiendo",
+      "lead_time": "Propagación de onda hacia el sur."
+    },
+    {
+      "id": "san_lorenzo",
+      "nombre": "San Lorenzo",
+      "tramo": "Paraná Inferior",
+      "altura": 2.50,
+      "variacion_24h": 0.02,
+      "alerta": 5.00,
+      "evacuacion": 5.50,
+      "tendencia": "estacionario",
+      "lead_time": "Zona de operaciones agroexportadoras."
     },
     {
       "id": "rosario",
       "nombre": "Rosario",
       "tramo": "Paraná Inferior",
-      "altura": 3.85,
-      "variacion_24h": 0,
-      "alerta": 5,
-      "evacuacion": 5.3,
+      "altura": 2.45,
+      "variacion_24h": 0.02,
+      "alerta": 5.00,
+      "evacuacion": 5.30,
       "tendencia": "estacionario",
-      "lead_time": "La onda del tramo medio impactará en la zona sur en 7 a 9 días."
+      "lead_time": "La onda del tramo medio impacta de forma amortiguada."
+    },
+    {
+      "id": "villa_constitucion",
+      "nombre": "Villa Constitución",
+      "tramo": "Paraná Inferior",
+      "altura": 2.10,
+      "variacion_24h": 0.00,
+      "alerta": 4.50,
+      "evacuacion": 5.00,
+      "tendencia": "estacionario",
+      "lead_time": "Sin alteraciones significativas en 24hs."
+    },
+    {
+      "id": "san_nicolas",
+      "nombre": "San Nicolás",
+      "tramo": "Paraná Inferior",
+      "altura": 2.05,
+      "variacion_24h": 0.00,
+      "alerta": 4.20,
+      "evacuacion": 4.50,
+      "tendencia": "estacionario",
+      "lead_time": "Niveles estables."
+    },
+    {
+      "id": "zarate",
+      "nombre": "Zárate",
+      "tramo": "Paraná Inferior",
+      "altura": 1.40,
+      "variacion_24h": -0.01,
+      "alerta": 2.00,
+      "evacuacion": 2.20,
+      "tendencia": "estacionario",
+      "lead_time": "Influenciado por régimen mareológico y descarga del Paraná."
     }
   ]
 }
