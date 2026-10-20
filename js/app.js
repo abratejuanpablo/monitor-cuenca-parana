@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = represas.map(r => {
             const porcentajeCompuertas = Math.round((r.compuertas_abiertas / r.compuertas_totales) * 100);
             
+            // Clases seguras de color para evitar problemas de compilación en Tailwind
+            const badgeClasses = r.estado_color === 'amber' 
+                ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
+                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            
             return `
                 <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-slate-700 transition-colors">
                     <div class="flex justify-between items-start">
@@ -47,12 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3 class="text-xl font-bold text-white">${r.nombre}</h3>
                             <p class="text-xs text-slate-400">${r.ubicacion}</p>
                         </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-${r.estado_color}-500/10 text-${r.estado_color}-400 border border-${r.estado_color}-500/20">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold border ${badgeClasses}">
                             ${r.estado_badge}
                         </span>
                     </div>
 
-                    <!-- Métricas Principales -->
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
                             <span class="text-[11px] text-slate-400 block mb-0.5">Caudal Entrante</span>
@@ -64,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
 
-                    <!-- Compuertas & Embalse -->
                     <div class="space-y-2">
                         <div class="flex justify-between text-xs">
                             <span class="text-slate-400">Compuertas del Vertedero: <strong class="text-slate-200">${r.compuertas_abiertas} de ${r.compuertas_totales} abiertas</strong></span>
@@ -91,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
 
         const filtrados = puertos.filter(p => {
-            const coincideTramo = tramoFiltro === 'todos' || p.tramo === tramoFiltro;
+            const coincideTramo = tramoFiltro === 'todos' || p.tramo.toLowerCase().includes(tramoFiltro.toLowerCase());
             const coincideNombre = p.nombre.toLowerCase().includes(query);
             return coincideTramo && coincideNombre;
         });
@@ -106,11 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const distanciaAlerta = (p.alerta - p.altura).toFixed(2);
             const esCreciente = p.variacion_24h > 0;
             
-            let estadoColor = 'emerald';
+            let barraColor = 'bg-emerald-500';
             if (p.altura >= p.evacuacion) {
-                estadoColor = 'rose';
+                barraColor = 'bg-rose-500';
             } else if (p.altura >= p.alerta) {
-                estadoColor = 'amber';
+                barraColor = 'bg-amber-500';
             }
 
             return `
@@ -120,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400">${p.tramo}</span>
                             <h3 class="text-xl font-bold text-white">${p.nombre}</h3>
                         </div>
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-${esCreciente ? 'emerald' : 'slate'}-500/10 text-${esCreciente ? 'emerald' : 'slate'}-400 border border-${esCreciente ? 'emerald' : 'slate'}-500/20">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium ${esCreciente ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'}">
                             ${esCreciente ? '↗️ +' : '➡️ '}${(p.variacion_24h * 100).toFixed(0)} cm / 24h
                         </span>
                     </div>
@@ -142,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="text-slate-200 font-semibold">${distanciaAlerta > 0 ? `A ${distanciaAlerta} m` : 'Superado'}</span>
                         </div>
                         <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                            <div class="h-full bg-${estadoColor}-500 rounded-full" style="width: ${porcentaje}%;"></div>
+                            <div class="h-full ${barraColor} rounded-full" style="width: ${porcentaje}%;"></div>
                         </div>
                     </div>
 
@@ -156,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.filtro-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
+            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
+            e.target.classList.add('active', 'bg-blue-600', 'text-white');
             tramoFiltro = e.target.dataset.tramo;
             if (datosGlobales && datosGlobales.puertos) renderizarPuertos(datosGlobales.puertos);
         });
