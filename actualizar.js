@@ -1,23 +1,7 @@
 const fs = require('fs');
 
-// Lista de puertos objetivo de la Cuenca del Paraná que queremos filtrar
-const PUERTOS_OBJETIVO = [
-    { id: 'iguazu', puertoBuscado: 'IGUAZU', tramo: 'Alto Paraná', alerta: 25.00, evacuacion: 28.00 },
-    { id: 'posadas', puertoBuscado: 'POSADAS', tramo: 'Alto Paraná', alerta: 11.00, evacuacion: 12.00 },
-    { id: 'corrientes', puertoBuscado: 'CORRIENTES', tramo: 'Alto Paraná', alerta: 6.50, evacuacion: 7.00 },
-    { id: 'reconquista', puertoBuscado: 'RECONQUISTA', tramo: 'Paraná Medio', alerta: 5.10, evacuacion: 5.30 },
-    { id: 'la_paz', puertoBuscado: 'LA PAZ', tramo: 'Paraná Medio', alerta: 5.80, evacuacion: 6.15 },
-    { id: 'parana', puertoBuscado: 'PARANA', tramo: 'Paraná Medio', alerta: 4.70, evacuacion: 5.00 },
-    { id: 'santa_fe', puertoBuscado: 'SANTA FE', tramo: 'Paraná Medio', alerta: 4.70, evacuacion: 5.30 },
-    { id: 'rosario', puertoBuscado: 'ROSARIO', tramo: 'Paraná Inferior', alerta: 5.00, evacuacion: 5.30 },
-    { id: 'san_nicolas', puertoBuscado: 'SAN NICOLAS', tramo: 'Paraná Inferior', alerta: 4.20, evacuacion: 4.50 },
-    { id: 'zarate', puertoBuscado: 'ZARATE', tramo: 'Paraná Inferior', alerta: 2.00, evacuacion: 2.20 }
-];
-
 async function obtenerDatosPrefectura() {
     console.log('📡 Conectando con Prefectura Naval Argentina...');
-    
-    // URL del endpoint/json interno de Prefectura para alturas
     const urlPNA = 'https://contenidosweb.prefecturanaval.gob.ar/alturas/obtiene_alturas.php';
 
     try {
@@ -34,72 +18,71 @@ async function obtenerDatosPrefectura() {
         const dataPNA = await response.json();
         return dataPNA;
     } catch (error) {
-        console.error('⚠️ No se pudo obtener datos en directo de la API PNA, buscando alternativa...', error.message);
+        console.error('⚠️ No se pudo conectar con la API de PNA:', error.message);
         return null;
     }
 }
 
 async function procesarYActualizar() {
-    // 1. Leemos la estructura actual de datos.json
     let rawLocal = fs.readFileSync('datos.json', 'utf8');
     let jsonLocal = JSON.parse(rawLocal);
 
-    // 2. Obtenemos los datos oficiales de PNA
     const datosOficiales = await obtenerDatosPrefectura();
 
     if (datosOficiales && Array.isArray(datosOficiales)) {
-        console.log(`✅ Se recibieron ${datosOficiales.length} registros de Prefectura.`);
+        console.log(`✅ Se recibieron ${datosOficiales.length} registros totales de Prefectura.`);
 
-        const puertosActualizados = [];
+        // Filtramos de forma dinámica todos los que pertenezcan al sistema del Río Paraná
+        const puertosParana = datosOficiales.filter(p => {
+            const rio = (p.rio || '').toUpperCase();
+            return rio.includes('PARANÁ') || rio.includes('PARANA');
+        });
 
-        for (const config of PUERTOS_OBJETIVO) {
-            // Buscamos el puerto por nombre dentro de la lista de PNA
-            const registroPNA = datosOficiales.find(p => 
-                p.puerto && p.puerto.toUpperCase().includes(config.puertoBuscado)
-            );
+        console.log(`🌊 Se detectaron ${puertosParana.length} estaciones pertenecientes a la cuenca del Paraná.`);
 
-            if (registroPNA) {
-                const alturaActual = parseFloat(registroPNA.altura) || 0;
-                const variacion = parseFloat(registroPNA.variacion) || 0;
-                let tendencia = 'estacionario';
-                if (registroPNA.estado) {
-                    const est = registroPNA.estado.toLowerCase();
-                    if (est.includes('crece') || est.includes('ascenso') || variacion > 0) tendencia = 'subiendo';
-                    if (est.includes('baja') || est.includes('descenso') || variacion < 0) tendencia = 'bajando';
-                }
+        // Mapeamos los datos al formato que lee tu sitio web
+        const puertosMapeados = puertosParana.map(p => {
+            const altura = parseFloat(p.altura) || 0;
+            const variacion = parseFloat(p.variacion) || 0;
+            const alerta = parseFloat(p.alerta) || 5.00;
+            const evacuacion = parseFloat(p.evacuacion) || 6.00;
 
-                puertosActualizados.push({
-                    id: config.id,
-                    nombre: registroPNA.puerto,
-                    tramo: config.tramo,
-                    altura: alturaActual,
-                    variacion_24h: variacion,
-                    alerta: config.alerta,
-                    evacuacion: config.evacuacion,
-                    tendencia: tendencia,
-                    lead_time: `Medición oficial PNA (${registroPNA.fecha || 'Hoy'}).`
-                });
-            } else {
-                // Si no se encuentra en la respuesta puntual, mantenemos el registro local previo
-                const previo = jsonLocal.puertos.find(p => p.id === config.id);
-                if (previo) puertosActualizados.push(previo);
-            }
-        }
+            let tendencia = 'estacionario';
+            const est = (p.estado || '').toLowerCase();
+            if (est.includes('crece') || est.includes('ascenso') || variacion > 0) tendencia = 'subiendo';
+            if (est.includes('baja') || est.includes('descenso') || variacion < 0) tendencia = 'bajando';
 
-        if (puertosActualizados.length > 0) {
-            jsonLocal.puertos = puertosActualizados;
+            // Generamos un ID único y limpio basado en el nombre del puerto
+            const idSeguro = p.puerto ? p.puerto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '_') : 'puerto';
+
+            return {
+                id: idSeguro,
+                nombre: p.puerto || 'Puerto Desconocido',
+                tramo: p.rio || 'Río Paraná',
+                altura: altura,
+                variacion_24h: variacion,
+                alerta: alerta,
+                evacuacion: evacuacion,
+                tendencia: tendencia,
+                lead_time: `Medición oficial PNA (${p.fecha || 'Actualizado'}).`
+            };
+        });
+
+        if (puertosMapeados.length > 0) {
+            // Mantenemos las represas intactas y actualizamos la lista completa de puertos de la cuenca
+            jsonLocal.puertos = puertosMapeados;
         }
     } else {
-        console.log('⚠️ No se pudieron actualizar los valores reales; se mantiene la versión previa.');
+        console.log('⚠️ Usando valores previos debido a un fallo en la conexión con PNA.');
     }
 
-    // 3. Actualizamos fecha de sincronización
+    // Actualizamos la fecha de sincronización
     jsonLocal.actualizado_el = new Date().toISOString();
-    jsonLocal.fuente = "Prefectura Naval Argentina (PNA) - Datos Oficiales";
+    jsonLocal.fuente = "Prefectura Naval Argentina (PNA) - Sincronización Automática Completa";
 
-    // 4. Guardamos el archivo actualizado
+    // Guardamos el archivo
     fs.writeFileSync('datos.json', JSON.stringify(jsonLocal, null, 2), 'utf8');
-    console.log('🎉 ¡datos.json actualizado con éxito con datos de Prefectura!');
+    console.log('🎉 ¡datos.json actualizado con todas las ubicaciones del Paraná!');
 }
 
 procesarYActualizar();
