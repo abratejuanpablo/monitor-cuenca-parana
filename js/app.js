@@ -38,8 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = represas.map(r => {
             const porcentajeCompuertas = Math.round((r.compuertas_abiertas / r.compuertas_totales) * 100);
-            
-            // Clases seguras de color para evitar problemas de compilación en Tailwind
             const badgeClasses = r.estado_color === 'amber' 
                 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
                 : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
@@ -100,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (filtrados.length === 0) {
-            container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-sm">No se encontraron puertos.</div>`;
+            container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 text-sm">No se encontraron puertos con ese criterio.</div>`;
             return;
         }
 
@@ -157,15 +155,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     }
 
+    // Manejo de botones de filtro
     document.querySelectorAll('.filtro-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active', 'bg-blue-600', 'text-white'));
+            document.querySelectorAll('.filtro-btn').forEach(b => {
+                b.classList.remove('active', 'bg-blue-600', 'text-white');
+                b.classList.add('bg-slate-900', 'border', 'border-slate-800', 'text-slate-300');
+            });
+            e.target.classList.remove('bg-slate-900', 'border', 'border-slate-800', 'text-slate-300');
             e.target.classList.add('active', 'bg-blue-600', 'text-white');
+            
             tramoFiltro = e.target.dataset.tramo;
             if (datosGlobales && datosGlobales.puertos) renderizarPuertos(datosGlobales.puertos);
         });
     });
 
+    // Manejo del buscador en tiempo real
     document.getElementById('buscador')?.addEventListener('input', () => {
         if (datosGlobales && datosGlobales.puertos) renderizarPuertos(datosGlobales.puertos);
     });
